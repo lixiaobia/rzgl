@@ -35,6 +35,15 @@ module.exports = {
     overlay: {
       warnings: false,
       errors: true
+    },
+    proxy: {
+      '/abc': {
+        target: 'http://ihrm.itheima.net/',
+        changeOrigin: true,
+        pathRewrite: {
+          '/abc': ''
+        }
+      }
     }
     // before: require('./mock/mock-server.js')
   },
