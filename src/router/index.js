@@ -141,6 +141,16 @@ const asyncRoutes = [
       component: () => import('@/views/social/index'),
       meta: { title: '社保', icon: 'table' }
     }]
+  },
+  {
+    path: '/import',
+    hidden: true,
+    component: Layout,
+    children: [{
+      path: '',
+      name: 'import',
+      component: () => import('@/views/import/index')
+    }]
   }
 ]
 

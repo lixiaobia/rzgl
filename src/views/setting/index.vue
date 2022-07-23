@@ -6,7 +6,9 @@
           <el-tab-pane label="用户管理" name="first">
             <RoleManage></RoleManage>
           </el-tab-pane>
-          <el-tab-pane label="配置管理" name="second">公司信息</el-tab-pane>
+          <el-tab-pane label="配置管理" name="second">
+            <CompanyInfo></CompanyInfo>
+          </el-tab-pane>
         </el-tabs>
       </el-card>
     </div>
@@ -15,9 +17,10 @@
 
 <script>
 import RoleManage from './components/RoleManage'
+import CompanyInfo from './components/CompanyInfo'
 export default {
   filters: {},
-  components: { RoleManage },
+  components: { RoleManage, CompanyInfo },
   data () {
     return {
       activeName: 'first'

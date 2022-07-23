@@ -43,6 +43,16 @@ Object.keys(directives).forEach(item => {
   // Vue.directive('imgerror', {})
   Vue.directive(item, directives[item])
 })
+
+import components from '@/components'
+Vue.use(components)
+
+// 全局过滤器  批量导入
+import * as filters from '@/filters'
+Object.keys(filters).forEach(item => {
+  Vue.filter(item, filters[item])
+})
+
 new Vue({
   el: '#app',
   router,

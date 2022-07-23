@@ -1,6 +1,12 @@
 <template>
   <div>
-    <el-button type="primary" size="mini" @click="roleDialogVisible = true"
+    <el-button
+      type="primary"
+      size="mini"
+      @click="
+        roleDialogVisible = true;
+        isEdit = false;
+      "
       >新增角色</el-button
     >
     <el-table :data="roleList" border>
@@ -13,7 +19,7 @@
         <template v-slot="scope">
           <el-button type="text" @click="showRightDialog(scope.row.id)"
             >分配权限</el-button
-          ><el-button type="text">修改</el-button
+          ><el-button type="text" @click="showDialog(scope.row)">修改</el-button
           ><el-button type="text" @click="del(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
@@ -32,7 +38,7 @@
       </el-pagination>
     </el-row>
     <!-- 分配权限 -->
-    <el-dialog title="提示" :visible.sync="rightDialog" width="30%">
+    <el-dialog title="分配权限" :visible.sync="rightDialog" width="30%">
       <el-tree
         v-if="rightDialog"
         ref="mytree"
@@ -51,7 +57,7 @@
     </el-dialog>
     <!-- 添加和编辑的对话框 -->
     <el-dialog
-      title="提示"
+      :title="isEdit ? '编辑' : '新增'"
       :visible.sync="roleDialogVisible"
       width="50%"
       @close="reset"
@@ -79,7 +85,7 @@
 </template>
 
 <script>
-import { getRoleList, delRole, addRole } from '@/api/setting'
+import { getRoleList, delRole, addRole, editRole } from '@/api/setting'
 import { getPermissions, getPermissionsById, assignPermission } from '@/api/permission'
 import { treeList } from '@/utils'
 export default {
@@ -106,7 +112,8 @@ export default {
         name: [
           { required: true, message: '角色名称不能为空', trigger: 'blur' }
         ]
-      }
+      },
+      isEdit: false
     }
   },
   computed: {},
@@ -178,12 +185,28 @@ export default {
       // 表单二次校验
       this.$refs.myForm.validate(async (bool) => {
         if (!bool) return this.$message.error('表单数据非法')
-        await addRole(this.form)
+        if (this.isEdit) {
+          await editRole(this.form)
+        } else {
+          await addRole(this.form)
+        }
+        this.getRoleList()
         this.roleDialogVisible = false
       })
     },
     reset () {
       this.$refs.myForm.resetFields()
+      this.form = {
+        name: '',
+        description: ''
+      }
+    },
+    // 修改
+    showDialog (row) {
+      this.isEdit = true
+      this.roleDialogVisible = true
+      this.form = { ...row }// 浅拷贝
+      // this.form = Object.assign({}, row)// 浅拷贝
     }
 
   }
